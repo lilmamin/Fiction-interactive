@@ -1,30 +1,27 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+//import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Dashboard
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-gray-900">
-                        You're logged in!
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h2>Vous êtes authentifié·e !</h2>
+        <p>
+            Bienvenue sur le tableau de bord, veuillez sélectionner une histoire
+            :
+        </p>
     </AuthenticatedLayout>
 </template>
+
+<style scoped>
+h2 {
+    color: #e3710e;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 10rem;
+    margin-left: 10rem;
+    font-family: "Poppins", sans-serif;
+}
+</style>

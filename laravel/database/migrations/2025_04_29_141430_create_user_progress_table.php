@@ -12,9 +12,14 @@ return new class extends Migration {
     {
         Schema::create('user_progress', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('story_id')->constrained()->onDelete('cascade');
+            $table->foreignId('chapter_id')->nullable()->constrained()->onDelete('set null');
+            $table->timestamp('last_updated_at')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

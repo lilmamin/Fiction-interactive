@@ -14,6 +14,15 @@ class ChapterController extends Controller
         return response()->json(Chapter::with('choices')->get());
     }
 
+    public function getChapterByStory($story_id)
+    {
+        $chapters = Chapter::where('story_id', $story_id)
+            ->with('choices')
+            ->get();
+
+        return response()->json($chapters);
+    }
+
     public function show(Chapter $chapter)
     {
         return response()->json($chapter->load('choices'));

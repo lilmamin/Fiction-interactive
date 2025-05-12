@@ -10,12 +10,13 @@ use App\Http\Controllers\Controller;
 
 class StoryController extends Controller
 {
-    public function index()
+    public function getStories()
     {
-        return response()->json(Story::all());
+        return response()->json(Story::with('chapters.choices')->get());
     }
 
-    public function show(Story $story)
+
+    public function getStory(Story $story)
     {
         return response()->json($story->load('chapters.choices'));
     }

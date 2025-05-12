@@ -21,7 +21,7 @@ class ChoiceController extends Controller
     }
 
 
-    public function indexByChapter(Chapter $chapter)
+    public function getChoicesByChapter(Chapter $chapter)
     {
         return response()->json($chapter->choices()->with('nextChapter')->get());
     }

@@ -40,6 +40,7 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
+
     /**
      * Delete the user's account.
      */
@@ -59,5 +60,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+
+    public function showCurrentUser(Request $request)
+    {
+        return response()->json($request->user());
     }
 }

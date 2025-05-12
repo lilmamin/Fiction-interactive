@@ -116,20 +116,14 @@ export function fetchJson(options) {
                 clearTimeout(timeoutId);
                 if (err.name === "AbortError") {
                     reject({
-                        status: 408,
-                        statusText: "Request Timeout",
-                        data: null,
-                    });
-                } else if (err === "AbortExternally") {
-                    reject({
-                        status: 499,
-                        statusText: "Client Closed Request",
+                        status: 0,
+                        statusText: "Request aborted (timeout)",
                         data: null,
                     });
                 } else {
                     reject({
                         status: 0,
-                        statusText: err.message || "Unknown Network Error",
+                        statusText: err.message || "Network error",
                         data: null,
                     });
                 }
@@ -138,6 +132,6 @@ export function fetchJson(options) {
 
     return {
         request,
-        abort: () => controller.abort("AbortExternally"),
+        abort: () => controller.abort(),
     };
 }
