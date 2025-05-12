@@ -14,11 +14,13 @@ class Story1Seeder extends Seeder
      */
     public function run()
     {
+
         // Create a story
         $story = Story::create([
-            'title' => 'titre de l\'histoire',
+            'title' => 'Une drôle de nuit',
             'content' => 'Êtes-vous prêt·e à être pertubé·e ?',
-            'image' => 'https://example.com/image.jpg',
+            'image' => '/images/confusedAF.jpeg',
+            'description' => 'Une histoire interactive où vous devez faire des choix pour avancer dans l\'histoire. Chaque choix peut avoir des conséquences différentes sur le déroulement de l\'histoire.',
         ]);
 
         // Create choices for the story
@@ -124,6 +126,6 @@ class Story1Seeder extends Seeder
 
         Choice::create(['text' => 'Il tente d’ignorer ses souvenirs et de commencer sa journée comme d’habitude.', 'chapter_id' => $chapter10->id, 'next_chapter_id' => $chapter11->id, 'feedback' => "Après avoir mis un peu de temps à sortir de son lit, Michel se rend compte qu'il meurt.. de faim ! lol. Alors il descend dans le supermarché du coin, celui où il a l'habitude d'aller taper la causette avec le caissier en achetant son croissant au beurre."]);
         Choice::create(['text' => 'Il se réveille et accourt au supermarché qu’il a cru reconnaître de son rêve, celui en bas de son immeuble', 'chapter_id' => $chapter10->id, 'next_chapter_id' => $chapter11->id, 'feedback' => "Dans la rue, la panique semble reigner..."]);
-
     }
+
 }

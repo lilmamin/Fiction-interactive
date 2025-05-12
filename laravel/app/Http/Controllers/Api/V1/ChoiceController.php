@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\StoreChoiceRequest;
 use App\Http\Requests\UpdateChoiceRequest;
 use App\Models\Choice;
+use App\Models\Chapter;
 use App\Http\Controllers\Controller;
 
 class ChoiceController extends Controller
@@ -18,6 +19,13 @@ class ChoiceController extends Controller
     {
         return response()->json($choice->load('nextChapter'));
     }
+
+
+    public function indexByChapter(Chapter $chapter)
+    {
+        return response()->json($chapter->choices()->with('nextChapter')->get());
+    }
+
 
     public function store(StoreChoiceRequest $request)
     {
