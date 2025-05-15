@@ -10,14 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_progress', function (Blueprint $table) {
+        Schema::create('user_progresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('story_id')->constrained()->onDelete('cascade');
             $table->foreignId('chapter_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamp('last_updated_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'story_id']); // une seule progression par histoire par utilisateur
         });
+
     }
 
 

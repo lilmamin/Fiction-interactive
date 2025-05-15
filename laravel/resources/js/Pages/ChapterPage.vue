@@ -1,72 +1,107 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { usePage, router } from "@inertiajs/vue3";
 
-// Props transmises par Inertia via route web.php
-const props = defineProps({
-    storyId: Number,
-});
+const storyId = usePage().props.storyId;
 
-const chapters = ref([]);
-const loading = ref(true);
+const chapter = ref(null);
+const selectedFeedback = ref("");
+const showNextButton = ref(false);
 
-onMounted(async () => {
+const fetchFirstChapter = async () => {
     try {
-        const response = await fetch(
-            `/api/v1/stories/${props.storyId}/chapters`
-        );
-        if (!response.ok) throw new Error("Erreur lors du chargement");
-
-        chapters.value = await response.json();
+        const res = await fetch(`/api/v1/stories/${storyId}/chapters`);
+        if (!res.ok) throw new Error("Erreur chargement premier chapitre");
+        const chapters = await res.json();
+        chapter.value = chapters[0]; // ou adapte selon ta structure
     } catch (error) {
-        console.error(error.message);
-    } finally {
-        loading.value = false;
+        console.error(error);
     }
+};
+
+const fetchChapter = async (id) => {
+    try {
+        const res = await fetch(`/api/v1/chapters/${id}`);
+        if (!res.ok) throw new Error("Chapitre introuvable");
+        chapter.value = await res.json();
+        selectedFeedback.value = "";
+        showNextButton.value = false;
+    } catch (error) {
+        console.error(error);
+        router.visit("/not-found"); // ou définis une page d’erreur
+    }
+};
+
+onMounted(() => {
+    fetchFirstChapter();
 });
+
+const selectChoice = (choice) => {
+    selectedFeedback.value = choice.feedback;
+    showNextButton.value = true;
+    chapter.value.next_chapter_id = choice.next_chapter_id;
+    chapter.value.is_ending = choice.is_ending;
+};
+
+const goToNext = () => {
+    if (chapter.value.is_ending) {
+        router.visit("/ending");
+    } else {
+        fetchChapter(chapter.value.next_chapter_id);
+    }
+};
 </script>
 
 <template>
-    <Head title="Chapitres" />
+    <div class="chapter">
+        <h1>{{ chapter?.title }}</h1>
+        <p>{{ chapter?.content }}</p>
 
-    <div style="padding: 2rem">
-        <h1>Chapitres de l’histoire #{{ props.storyId }}</h1>
-
-        <div v-if="loading">Chargement des chapitres...</div>
-
-        <ul v-else-if="chapters.length">
-            <li
-                v-for="chapter in chapters"
-                :key="chapter.id"
-                style="margin-bottom: 2rem"
+        <div v-if="!selectedFeedback">
+            <button
+                v-for="choice in chapter?.choices || []"
+                :key="choice.id"
+                @click="selectChoice(choice)"
+                class="choice-btn"
             >
-                <h2>{{ chapter.title }}</h2>
-                <p>{{ chapter.content }}</p>
+                {{ choice.text }}
+            </button>
+        </div>
 
-                <ul v-if="chapter.choices && chapter.choices.length">
-                    <li v-for="choice in chapter.choices" :key="choice.id">
-                        <button>{{ choice.text }}</button>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-        <p v-else>Aucun chapitre trouvé.</p>
+        <div v-if="selectedFeedback" class="feedback">
+            <p><strong>Feedback :</strong> {{ selectedFeedback }}</p>
+            <button @click="goToNext" class="next-btn">Suivant</button>
+        </div>
     </div>
 </template>
 
 <style scoped>
-h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-top: 1rem;
+.chapter {
+    padding: 2rem;
+    max-width: 700px;
+    margin: auto;
+    text-align: center;
 }
-button {
-    margin-top: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: #f3722c;
-    border: none;
+.choice-btn {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.7rem 1.5rem;
+    background-color: #f3722c;
     color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.feedback {
+    margin-top: 2rem;
+}
+.next-btn {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
 </style>
