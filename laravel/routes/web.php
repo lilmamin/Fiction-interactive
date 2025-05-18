@@ -37,6 +37,31 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+Route::get('/story/{storyId}/chapter/{chapterId}', function ($storyId, $chapterId) {
+    return Inertia::render('ChapterDetailPage', [
+        'storyId' => (int) $storyId,
+        'chapterId' => (int) $chapterId,
+    ]);
+})->name('chapter-detail');
+
+Route::get('/story/{storyId}/chapter/{chapterId}', function ($storyId, $chapterId) {
+    return Inertia::render('ChapterDetailPage', [
+        'storyId' => (int) $storyId,
+        'chapterId' => (int) $chapterId,
+    ]);
+})->name('chapter-detail');
+
+
+
+Route::get('/story/{storyId}/chapter/{chapterId}', function ($storyId, $chapterId) {
+    return Inertia::render('ChapterDetailPage', [
+        'storyId' => (int) $storyId,
+        'chapterId' => (int) $chapterId,
+    ]);
+})->name('chapter-detail');
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

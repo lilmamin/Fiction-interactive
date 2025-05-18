@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useFetchJson } from "@/composables/useFetchJson.js";
+import { router } from "@inertiajs/vue3";
 
 const route = useRoute();
 const router = useRouter();
@@ -23,10 +24,20 @@ const {
 function chooseOption(choice) {
     selectedChoice.value = choice;
     showFeedback.value = true;
+    console.log("is_ending ?", choice.is_ending);
+    console.log("next_chapter_id ?", choice.next_chapter_id);
 }
 
 function goToNextChapter() {
-    if (selectedChoice.value && selectedChoice.value.next_chapter_id) {
+    if (!selectedChoice.value) return;
+
+    if (
+        selectedChoice.value.is_ending === true ||
+        selectedChoice.value.is_ending === 1
+    ) {
+        // Redirection vers le dashboard (attention : router.visit, pas push)
+        router.visit("/dashboard");
+    } else if (selectedChoice.value.next_chapter_id) {
         router.push({
             name: "chapter-detail",
             params: {
@@ -63,7 +74,7 @@ function goToNextChapter() {
                 {{ selectedChoice.feedback }}
             </p>
             <button style="margin-top: 1.5rem" @click="goToNextChapter">
-                Suivant
+                {{ selectedChoice?.is_ending ? "Recommencer" : "Suivant" }}
             </button>
         </div>
     </div>

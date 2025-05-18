@@ -10,6 +10,10 @@ class Choice extends Model
     use HasFactory;
 
     protected $fillable = ['chapter_id', 'text', 'next_chapter_id', 'feedback'];
+    protected $casts = [
+        'is_ending' => 'boolean',
+    ];
+
 
 
     public function chapter()
