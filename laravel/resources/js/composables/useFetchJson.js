@@ -18,6 +18,7 @@ import { fetchJson } from "@/utils/fetchJson";
  * @property {Ref} loading - Indicates loading state
  * @property {Function} abort - Function to abort the request
  */
+
 export function useFetchJson(options) {
     const data = ref(null);
     const error = ref(null);

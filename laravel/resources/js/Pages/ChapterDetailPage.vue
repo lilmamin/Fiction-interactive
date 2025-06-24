@@ -10,9 +10,11 @@ const router = useRouter();
 const storyId = route.params.storyId;
 const chapterId = route.params.chapterId;
 
+//réactivité choix de l'utilisateur
 const selectedChoice = ref(null);
 const showFeedback = ref(false);
 
+//appel API
 const {
     data: chapter,
     loading,
